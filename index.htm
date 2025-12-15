@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>سیستم تشخیص دیابت</title>
+  <style>
+    body {
+      font-family: Tahoma, 'Vazir', sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #555;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .result.positive {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    .result.negative {
+      background-color: #d4edda;
+      color: #155724;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>سیستم قانون‌محور تشخیص دیابت</h2>
+  <div class="form-group">
+    <label for="glucose">گلوکز (Glucose):</label>
+    <input type="number" id="glucose" step="0.1" placeholder="مثال: 120" required />
+  </div>
+  <div class="form-group">
+    <label for="bmi">شاخص توده بدنی (BMI):</label>
+    <input type="number" id="bmi" step="0.1" placeholder="مثال: 32.0" required />
+  </div>
+  <div class="form-group">
+    <label for="dpf">تابع سابقه ژنتیکی دیابت (DiabetesPedigreeFunction):</label>
+    <input type="number" id="dpf" step="0.001" placeholder="مثال: 0.5" required />
+  </div>
+  <div class="form-group">
+    <label for="age">سن (Age):</label>
+    <input type="number" id="age" placeholder="مثال: 35" required />
+  </div>
+  <button onclick="predict()">پیش‌بینی</button>
+  <div id="result" class="result" style="display:none;"></div>
+</div>
+
+<script>
+  function predict() {
+    const glucose = parseFloat(document.getElementById("glucose").value);
+    const bmi = parseFloat(document.getElementById("bmi").value);
+    const dpf = parseFloat(document.getElementById("dpf").value);
+    const age = parseFloat(document.getElementById("age").value);
+
+    // اعتبارسنجی ورودی
+    if (isNaN(glucose) || isNaN(bmi) || isNaN(dpf) || isNaN(age)) {
+      alert("لطفاً تمام فیلدها را به درستی پر کنید.");
+      return;
+    }
+
+    let result = 0; // Default
+
+    // Rules for 1 (Diabetic)
+    if (
+      (glucose > 101 && glucose <= 154 && bmi > 43.3 && age > 29) ||
+      (glucose > 154) ||
+      (glucose > 101 && bmi > 26.7 && dpf > 0.464 && age > 29)
+    ) {
+      result = 1;
+    }
+    // در غیر این صورت، مقدار پیش‌فرض 0 باقی می‌ماند
+
+    const resultDiv = document.getElementById("result");
+    if (result === 1) {
+      resultDiv.className = "result positive";
+      resultDiv.textContent = "نتیجه: 1 (احتمال دیابت بالا)";
+    } else {
+      resultDiv.className = "result negative";
+      resultDiv.textContent = "نتیجه: 0 (احتمال دیابت پایین)";
+    }
+    resultDiv.style.display = "block";
+  }
+</script>
+
+</body>
+</html>
