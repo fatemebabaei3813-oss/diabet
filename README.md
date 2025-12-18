@@ -1,2 +1,58 @@
-# diabet
-این یک پروژه تشخیص دیابت است در سال 1404 ساخته است.
+# 🩺 سیستم قانون‌محور تشخیص دیابت  
+### *یک ابزار هوشمند، امن و کاربرپسند برای ارزیابی اولیهٔ خطر دیابت*
+
+[![Demo](https://img.shields.io/badge/دمو-آنلاین-2563eb?style=for-the-badge&logo=github&logoColor=white)](https://your-username.github.io/diabetes-predictor)
+[![License](https://img.shields.io/badge/لایسنس-MIT-green?style=for-the-badge)](LICENSE)
+[![HTML5](https://img.shields.io/badge/HTML5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)](#)
+[![CSS3](https://img.shields.io/badge/CSS3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)](#)
+[![JavaScript](https://img.shields.io/badge/JavaScript-%23F7DF1E.svg?style=for-the-badge&logo=javascript&logoColor=black)](#)
+
+<div align="center">
+  <img src="https://github.com/your-username/diabetes-predictor/assets/00000000/placeholder-light.png" alt="رابط کاربری در حالت روشن" width="580" style="border-radius:12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+  <br><sub><i>رابط کاربری مدرن با پشتیبانی از حالت تاریک و روشن</i></sub>
+</div>
+
+---
+
+## 📌 دربارهٔ پروژه  
+این ابزار یک **سیستم قانون‌محور ساده** برای پیش‌بینی احتمال ابتلا به دیابت نوع ۲ است که تنها بر اساس چهار شاخص بالینی کار می‌کند:
+
+- 🩸 **گلوکز خون** (Glucose)  
+- ⚖️ **شاخص توده بدنی** (BMI)  
+- 🧬 **تابع سابقهٔ ژنتیکی دیابت** (Diabetes Pedigree Function)  
+- 🎂 **سن** (Age)
+
+> ⚠️ **تذکر مهم**: این سیستم **فقط یک ابزار کمکی** برای غربالگری اولیه است و **هیچ‌گاه جایگزین نظر پزشک متخصص** نخواهد بود. در صورت دریافت نتیجهٔ مثبت، حتماً به پزشک مراجعه کنید.
+
+---
+
+## ✨ ویژگی‌های کلیدی
+
+| ویژگی | توضیح |
+|-------|--------|
+| 🌓 **حالت تاریک/روشن** | پشتیبانی کامل از تم تیره و روشن — با ذخیرهٔ خودکار تنظیمات کاربر |
+| 📱 **ریسپانسیو** | نمایش عالی در موبایل، تبلت و دسکتاپ |
+| 🧪 **اعتبارسنجی پیشرفته** | تشخیص فوری ورودی‌های نامعتبر + فیدبک بصری |
+| 🎨 **طراحی مدرن پزشکی** | رنگ‌های آرامش‌بخش، فونت فارسی `Vazir`، آیکون‌های معنادار |
+| ⚡ **بدون نیاز به سرور** | کاملاً کلاینت‌ساید — فقط یک فایل HTML! |
+| 🌐 **قابل اجرا با GitHub Pages** | مستقیماً روی گیت‌هاب منتشر و به اشتراک بگذارید |
+
+---
+
+## 🚀 نحوهٔ استفاده
+
+### ۱. دموی زنده  
+🔗 [مشاهدهٔ نسخهٔ آنلاین](https://your-username.github.io/diabetes-predictor)
+
+### ۲. اجرای محلی  
+فقط کافی است فایل `index.html` را در مرورگر خود باز کنید — نیازی به نصب چیزی نیست!
+
+### ۳. توسعه و ویرایش  
+```bash
+# کلون کردن ریپازیتوری
+git clone https://github.com/your-username/diabetes-predictor.git
+
+# وارد پوشه شوید
+cd diabetes-predictor
+
+# فایل index.html را در مرورگر باز کنید
