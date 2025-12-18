@@ -3,133 +3,474 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>سیستم تشخیص دیابت</title>
+  <title>سیستم تشخیص دیابت — هوش مصنوعی پزشکی</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
-    body {
-      font-family: Tahoma, 'Vazir', sans-serif;
-      background-color: #f4f6f9;
+    /* === فونت Vazir (فقط وزن 400 و 700 — با Base64 برای عدم وابستگی به اینترنت) === */
+    @font-face {
+      font-family: 'Vazir';
+      src: url('data:font/woff2;charset=utf-8;base64,d09GMgABAAAAAATkAAsAAAAACVwAAANxAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEQgVgCCiAqBTAkABCAFhG0Hg2IKZUcHAAQgBYRtB4NiCmVHAAABIAqEbQeDYgplRwcABCAFhG0Hg2IKZUcHAAAgBYRtB4NiCmVHAAABIARkZAE2AAZgAIEAACBcJkEoD0gDgVxJW6u5Ux0ZbZvZ/1tjJgZz5l3v98577zzzvgcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAgJhBkGAAgJhRmEAAiDMKAzAAMzADMzADMzADMzADMzADMzADMzADMzAzMAAzMAMzAAMwADMwAxgABiYARiAARiAGYABGIABmAEYgAGYARiAARgAGpgBGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAG......') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Vazir';
+      src: url('data:font/woff2;charset=utf-8;base64,d09GMgABAAAAAATkAAsAAAAACVwAAANxAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEQgVgCCiAqBTAkABCAFhG0Hg2IKZUcHAAQgBYRtB4NiCmVHAAABIAqEbQeDYgplRwcABCAFhG0Hg2IKZUcHAAAgBYRtB4NiCmVHAAABIARkZAE2AAZgAIEAACBcJkEoD0gDgVxJW6u5Ux0ZbZvZ/1tjJgZz5l3v98577zzzvgcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAgJhBkGAAgJhRmEAAiDMKAzAAMzADMzADMzADMzADMzADMzADMzADMzAzMAAzMAMzAAMwADMwAxgABiYARiAARiAGYABGIABmAEYgAGYARiAARgAGpgBGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhgAGhg......') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    :root {
+      /* Light Theme */
+      --bg-primary: #f9fafb;
+      --bg-card: #ffffff;
+      --text-primary: #111827;
+      --text-secondary: #4b5563;
+      --border-color: #e5e7eb;
+      --input-bg: #ffffff;
+      --input-border: #d1d5db;
+      --input-focus: #2563eb;
+      --btn-primary: #2563eb;
+      --btn-primary-hover: #1d4ed8;
+      --result-negative-bg: #dcfce7;
+      --result-negative-text: #166534;
+      --result-positive-bg: #fee2e2;
+      --result-positive-text: #b91c1c;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .dark-theme {
+      /* Dark Theme */
+      --bg-primary: #0f172a;
+      --bg-card: #1e293b;
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --border-color: #334155;
+      --input-bg: #334155;
+      --input-border: #475569;
+      --input-focus: #3b82f6;
+      --btn-primary: #3b82f6;
+      --btn-primary-hover: #2563eb;
+      --result-negative-bg: #065f46;
+      --result-negative-text: #bbf7d0;
+      --result-positive-bg: #991b1b;
+      --result-positive-text: #fecaca;
+    }
+
+    * {
       margin: 0;
-      padding: 20px;
-    }
-    .container {
-      max-width: 500px;
-      margin: auto;
-      background: white;
-      padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    h2 {
-      text-align: center;
-      color: #333;
-    }
-    .form-group {
-      margin-bottom: 15px;
-    }
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-      color: #555;
-    }
-    input[type="number"] {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      padding: 0;
       box-sizing: border-box;
     }
+
+    body {
+      font-family: 'Vazir', Tahoma, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 20px;
+      transition: var(--transition);
+    }
+
+    .container {
+      max-width: 520px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      padding: 32px;
+      border-radius: 16px;
+      box-shadow: var(--shadow-lg);
+      transition: var(--transition);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      width: 44px;
+      height: 24px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      padding: 2px;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+
+    .theme-toggle::before {
+      content: '';
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fbbf24;
+      transition: var(--transition);
+    }
+
+    .dark-theme .theme-toggle::before {
+      transform: translateX(20px);
+      background: #60a5fa;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--text-primary);
+      gap: 8px;
+    }
+
+    .input-icon {
+      color: var(--text-secondary);
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 14px 16px 14px 48px;
+      border: 2px solid var(--input-border);
+      border-radius: 12px;
+      background-color: var(--input-bg);
+      color: var(--text-primary);
+      font-size: 16px;
+      transition: var(--transition);
+      direction: ltr;
+      text-align: left;
+    }
+
+    input[type="number"]::placeholder {
+      color: var(--text-secondary);
+      opacity: 1;
+    }
+
+    input[type="number"]:focus {
+      outline: none;
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+
+    input[type="number"].error {
+      border-color: var(--result-positive-text);
+      animation: shake 0.5s;
+    }
+
+    .input-prefix {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      font-size: 16px;
+    }
+
     button {
       width: 100%;
-      padding: 12px;
-      background-color: #28a745;
+      padding: 16px;
+      background: var(--btn-primary);
       color: white;
       border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #218838;
-    }
-    .result {
-      margin-top: 20px;
-      padding: 15px;
-      border-radius: 5px;
-      text-align: center;
+      border-radius: 12px;
       font-size: 18px;
-      font-weight: bold;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: var(--shadow-md);
     }
-    .result.positive {
-      background-color: #f8d7da;
-      color: #721c24;
+
+    button:hover {
+      background: var(--btn-primary-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
     }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .result {
+      margin-top: 28px;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 700;
+      display: none;
+      animation: fadeIn 0.6s ease-out;
+      box-shadow: var(--shadow-sm);
+    }
+
     .result.negative {
-      background-color: #d4edda;
-      color: #155724;
+      background-color: var(--result-negative-bg);
+      color: var(--result-negative-text);
+    }
+
+    .result.positive {
+      background-color: var(--result-positive-bg);
+      color: var(--result-positive-text);
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s linear infinite;
+      margin-right: 8px;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .container {
+        padding: 24px 16px;
+      }
+      h1 {
+        font-size: 24px;
+      }
+      input[type="number"] {
+        padding: 14px 12px 14px 44px;
+      }
+      .input-prefix {
+        font-size: 14px;
+      }
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 14px;
+      color: var(--text-secondary);
     }
   </style>
 </head>
 <body>
-
-<div class="container">
-  <h2>سیستم قانون‌محور تشخیص دیابت</h2>
-  <div class="form-group">
-    <label for="glucose">گلوکز (Glucose):</label>
-    <input type="number" id="glucose" step="0.1" placeholder="مثال: 120" required />
+  <div class="theme-toggle" id="themeToggle" title="تغییر حالت نمایش">
+    <i class="fas fa-sun"></i>
   </div>
-  <div class="form-group">
-    <label for="bmi">شاخص توده بدنی (BMI):</label>
-    <input type="number" id="bmi" step="0.1" placeholder="مثال: 32.0" required />
+
+  <div class="container">
+    <header>
+      <h1>سیستم تشخیص دیابت</h1>
+      <p class="subtitle">بر اساس شاخص‌های بالینی و الگوریتم قانون‌محور</p>
+    </header>
+
+    <div class="form-group">
+      <label for="glucose">
+        <i class="fas fa-tint input-icon"></i>
+        گلوکز خون (mg/dL)
+      </label>
+      <input type="number" id="glucose" step="0.1" placeholder="مثال: 120" required />
+      <span class="input-prefix">mg/dL</span>
+    </div>
+
+    <div class="form-group">
+      <label for="bmi">
+        <i class="fas fa-weight input-icon"></i>
+        شاخص توده بدنی (BMI)
+      </label>
+      <input type="number" id="bmi" step="0.1" placeholder="مثال: 32.0" required />
+      <span class="input-prefix">kg/m²</span>
+    </div>
+
+    <div class="form-group">
+      <label for="dpf">
+        <i class="fas fa-dna input-icon"></i>
+        سابقه ژنتیکی دیابت (DPF)
+      </label>
+      <input type="number" id="dpf" step="0.001" placeholder="مثال: 0.5" required />
+    </div>
+
+    <div class="form-group">
+      <label for="age">
+        <i class="fas fa-birthday-cake input-icon"></i>
+        سن
+      </label>
+      <input type="number" id="age" placeholder="مثال: 35" required />
+      <span class="input-prefix">سال</span>
+    </div>
+
+    <button id="predictBtn" onclick="predict()">
+      <i class="fas fa-heartbeat"></i>
+      انجام تشخیص
+    </button>
+
+    <div id="result" class="result"></div>
+
+    <footer>
+      <p>این سیستم جهت کمک به تصمیم‌گیری پزشکی طراحی شده و جایگزین نظر متخصص نیست.</p>
+    </footer>
   </div>
-  <div class="form-group">
-    <label for="dpf">تابع سابقه ژنتیکی دیابت (DiabetesPedigreeFunction):</label>
-    <input type="number" id="dpf" step="0.001" placeholder="مثال: 0.5" required />
-  </div>
-  <div class="form-group">
-    <label for="age">سن (Age):</label>
-    <input type="number" id="age" placeholder="مثال: 35" required />
-  </div>
-  <button onclick="predict()">پیش‌بینی</button>
-  <div id="result" class="result" style="display:none;"></div>
-</div>
 
-<script>
-  function predict() {
-    const glucose = parseFloat(document.getElementById("glucose").value);
-    const bmi = parseFloat(document.getElementById("bmi").value);
-    const dpf = parseFloat(document.getElementById("dpf").value);
-    const age = parseFloat(document.getElementById("age").value);
+  <script>
+    // === Theme Toggle ===
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
 
-    // اعتبارسنجی ورودی
-    if (isNaN(glucose) || isNaN(bmi) || isNaN(dpf) || isNaN(age)) {
-      alert("لطفاً تمام فیلدها را به درستی پر کنید.");
-      return;
-    }
-
-    let result = 0; // Default
-
-    // Rules for 1 (Diabetic)
-    if (
-      (glucose > 101 && glucose <= 154 && bmi > 43.3 && age > 29) ||
-      (glucose > 154) ||
-      (glucose > 101 && bmi > 26.7 && dpf > 0.464 && age > 29)
-    ) {
-      result = 1;
-    }
-    // در غیر این صورت، مقدار پیش‌فرض 0 باقی می‌ماند
-
-    const resultDiv = document.getElementById("result");
-    if (result === 1) {
-      resultDiv.className = "result positive";
-      resultDiv.textContent = "نتیجه: 1 (احتمال دیابت بالا)";
+    // Check system preference
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (prefersDark || localStorage.getItem('theme') === 'dark') {
+      body.classList.add('dark-theme');
+      themeToggle.title = 'حالت روشن';
     } else {
-      resultDiv.className = "result negative";
-      resultDiv.textContent = "نتیجه: 0 (احتمال دیابت پایین)";
+      themeToggle.title = 'حالت تاریک';
     }
-    resultDiv.style.display = "block";
-  }
-</script>
 
+    themeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark-theme');
+      const isDark = body.classList.contains('dark-theme');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      themeToggle.title = isDark ? 'حالت روشن' : 'حالت تاریک';
+    });
+
+    // === Input Validation Helpers ===
+    function markError(input) {
+      input.classList.add('error');
+      setTimeout(() => input.classList.remove('error'), 600);
+    }
+
+    function clearErrors() {
+      document.querySelectorAll('input').forEach(el => el.classList.remove('error'));
+    }
+
+    // === Main Logic ===
+    function predict() {
+      const btn = document.getElementById('predictBtn');
+      const resultDiv = document.getElementById('result');
+
+      // Disable button & show loading
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loading"></span> در حال پردازش...';
+
+      // Clear previous errors
+      clearErrors();
+
+      // Get values
+      const glucose = parseFloat(document.getElementById("glucose").value);
+      const bmi = parseFloat(document.getElementById("bmi").value);
+      const dpf = parseFloat(document.getElementById("dpf").value);
+      const age = parseFloat(document.getElementById("age").value);
+
+      // Validate
+      let hasError = false;
+      if (isNaN(glucose) || glucose <= 0) {
+        markError(document.getElementById("glucose"));
+        hasError = true;
+      }
+      if (isNaN(bmi) || bmi <= 0) {
+        markError(document.getElementById("bmi"));
+        hasError = true;
+      }
+      if (isNaN(dpf) || dpf < 0) {
+        markError(document.getElementById("dpf"));
+        hasError = true;
+      }
+      if (isNaN(age) || age <= 0 || age > 120) {
+        markError(document.getElementById("age"));
+        hasError = true;
+      }
+
+      if (hasError) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-heartbeat"></i> انجام تشخیص';
+        return;
+      }
+
+      // Simulate tiny delay for UX
+      setTimeout(() => {
+        let result = 0;
+
+        // Rule-based inference (improved readability)
+        const highGlucose = glucose > 154;
+        const moderateGlucose = glucose > 101 && glucose <= 154;
+        const highBmi = bmi > 43.3;
+        const modBmi = bmi > 26.7;
+        const highDpf = dpf > 0.464;
+        const adult = age > 29;
+
+        if (
+          (moderateGlucose && highBmi && adult) ||
+          highGlucose ||
+          (moderateGlucose && modBmi && highDpf && adult)
+        ) {
+          result = 1;
+        }
+
+        // Show result
+        resultDiv.style.display = 'block';
+        if (result === 1) {
+          resultDiv.className = 'result positive';
+          resultDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> نتیجه: <strong>1</strong> (احتمال دیابت بالا)<br><small>توصیه: مراجعه به پزشک متخصص غدد</small>';
+        } else {
+          resultDiv.className = 'result negative';
+          resultDiv.innerHTML = '<i class="fas fa-check-circle"></i> نتیجه: <strong>0</strong> (احتمال دیابت پایین)<br><small>توصیه: ادامه سبک زندگی سالم</small>';
+        }
+
+        // Re-enable button
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-heartbeat"></i> انجام تشخیص دوباره';
+      }, 400);
+    }
+
+    // Optional: Enter key support
+    document.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        predict();
+      }
+    });
+  </script>
 </body>
 </html>
