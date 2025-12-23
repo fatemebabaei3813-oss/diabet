@@ -1,17 +1,5 @@
 # 🩺 سیستم قانون‌محور تشخیص دیابت  
 ### *یک ابزار هوشمند، امن و کاربرپسند برای ارزیابی اولیهٔ خطر دیابت*
-
-[![Demo](https://img.shields.io/badge/دمو-آنلاین-2563eb?style=for-the-badge&logo=github&logoColor=white)](https://your-username.github.io/diabetes-predictor)
-[![License](https://img.shields.io/badge/لایسنس-MIT-green?style=for-the-badge)](LICENSE)
-[![HTML5](https://img.shields.io/badge/HTML5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)](#)
-[![CSS3](https://img.shields.io/badge/CSS3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)](#)
-[![JavaScript](https://img.shields.io/badge/JavaScript-%23F7DF1E.svg?style=for-the-badge&logo=javascript&logoColor=black)](#)
-
-<div align="center">
-  <img src="https://github.com/your-username/diabetes-predictor/assets/00000000/placeholder-light.png" alt="رابط کاربری در حالت روشن" width="580" style="border-radius:12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
-  <br><sub><i>رابط کاربری مدرن با پشتیبانی از حالت تاریک و روشن</i></sub>
-</div>
-
 ---
 
 ## 📌 دربارهٔ پروژه  
