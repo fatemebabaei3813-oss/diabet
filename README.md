@@ -42,7 +42,7 @@
 ## 🚀 نحوهٔ استفاده
 
 ### ۱. دموی زنده  
-🔗 [مشاهدهٔ نسخهٔ آنلاین](https://your-username.github.io/diabetes-predictor)
+🔗 [مشاهدهٔ نسخهٔ آنلاین](https://fatemebabaei3813-oss.github.io/diabet/)
 
 ### ۲. اجرای محلی  
 فقط کافی است فایل `index.html` را در مرورگر خود باز کنید — نیازی به نصب چیزی نیست!
