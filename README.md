@@ -44,3 +44,5 @@ git clone https://github.com/your-username/diabetes-predictor.git
 cd diabetes-predictor
 
 # فایل index.html را در مرورگر باز کنید
+
+..............................
